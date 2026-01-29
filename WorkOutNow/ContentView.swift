@@ -9,53 +9,39 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Environment(LocalizationManager.self) private var localization
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        TabView {
+            WorkoutCalendarView()
+                .tabItem {
+                    Label(localization.text(english: "Workout", chinese: "训练"), systemImage: "calendar")
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
+            PlanCalendarView()
+                .tabItem {
+                    Label(localization.text(english: "Plan", chinese: "计划"), systemImage: "calendar.badge.checkmark")
+                }
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+            ExerciseDatabaseView()
+                .tabItem {
+                    Label(localization.text(english: "Exercises", chinese: "动作库"), systemImage: "figure.strengthtraining.traditional")
+                }
+
+            TrainingPlansView()
+                .tabItem {
+                    Label(localization.text(english: "Plans", chinese: "训练计划"), systemImage: "list.bullet.clipboard")
+                }
+
+            SettingsView()
+                .tabItem {
+                    Label(localization.text(english: "Settings", chinese: "设置"), systemImage: "gearshape")
+                }
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Exercise.self, inMemory: true)
 }

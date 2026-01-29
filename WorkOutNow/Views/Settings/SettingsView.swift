@@ -1,0 +1,60 @@
+//
+//  SettingsView.swift
+//  WorkOutNow
+//
+//  Created by Christopher on 2026/01/29.
+//
+
+import SwiftUI
+
+struct SettingsView: View {
+    @Environment(AuthenticationManager.self) private var authManager
+    @Environment(LocalizationManager.self) private var localization
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section(header: Text(localization.text(english: "Language", chinese: "语言"))) {
+                    Picker(localization.text(english: "App Language", chinese: "应用语言"), selection: Binding(
+                        get: { localization.language },
+                        set: { newValue in
+                            print("🌐 Language changing from \(localization.language.rawValue) to \(newValue.rawValue)")
+                            localization.language = newValue
+                            print("🌐 Language changed, new value: \(localization.language.rawValue)")
+                        }
+                    )) {
+                        ForEach(AppLanguage.allCases, id: \.self) { lang in
+                            Text(lang.displayName).tag(lang)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                Section(header: Text(localization.text(english: "Profile", chinese: "个人资料"))) {
+                    NavigationLink(destination: UserProfileView()) {
+                        Text(localization.text(english: "Edit Profile", chinese: "编辑资料"))
+                    }
+
+                    NavigationLink(destination: BodyMetricsView()) {
+                        Text(localization.text(english: "Body Metrics", chinese: "身体数据"))
+                    }
+                }
+
+                Section {
+                    Button(role: .destructive, action: {
+                        print("🔐 Sign out button tapped")
+                        withAnimation {
+                            authManager.signOut()
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                            Text(localization.text(english: "Sign Out", chinese: "退出登录"))
+                        }
+                    }
+                }
+            }
+            .navigationTitle(localization.text(english: "Settings", chinese: "设置"))
+        }
+    }
+}

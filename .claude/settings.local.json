@@ -2,7 +2,26 @@
   "permissions": {
     "allow": [
       "Bash(xcodebuild:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(xcrun simctl list:*)",
+      "Bash(open:*)",
+      "Bash(xcrun simctl boot:*)",
+      "Bash(xcrun simctl install:*)",
+      "Bash(xcrun simctl launch:*)",
+      "Bash(/usr/libexec/PlistBuddy:*)",
+      "Bash(ls:*)",
+      "Bash(xcrun simctl io:*)",
+      "Bash(xcrun simctl spawn:*)",
+      "Bash(APP_PATH=\"/Users/christopher/Library/Developer/Xcode/DerivedData/WorkOutNow-auilinmloizizjbrtforbocnukzp/Build/Products/Debug-iphonesimulator/WorkOutNow.app\":*)",
+      "Bash(DEVICE_ID=\"1C9ACAC6-9A50-41B4-97FA-95379C4DA8E4\")",
+      "Bash(__NEW_LINE_b4c09b5f02e3957b__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
+      "Bash(__NEW_LINE_6890a20da5cefd5b__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
+      "Bash(python3:*)",
+      "Bash(__NEW_LINE_394a89a90075fd6b__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
+      "Bash(__NEW_LINE_891dff21f166c377__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
+      "Bash(__NEW_LINE_dd8235a8d70fee4d__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
+      "Bash(__NEW_LINE_76b91a958ea6d166__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
+      "Bash(__NEW_LINE_76b91a958ea6d166__ sleep 8)"
     ]
   }
 }
