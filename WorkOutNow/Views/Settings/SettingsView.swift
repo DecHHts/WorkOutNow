@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(AuthenticationManager.self) private var authManager
     @Environment(LocalizationManager.self) private var localization
     @Environment(ThemeManager.self) private var themeManager
 
@@ -56,20 +55,6 @@ struct SettingsView: View {
 
                     NavigationLink(destination: BodyMetricsView().toolbar(.hidden, for: .tabBar)) {
                         Text(localization.text(english: "Body Metrics", chinese: "身体数据"))
-                    }
-                }
-
-                Section {
-                    Button(role: .destructive, action: {
-                        print("🔐 Sign out button tapped")
-                        withAnimation {
-                            authManager.signOut()
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "rectangle.portrait.and.arrow.right")
-                            Text(localization.text(english: "Sign Out", chinese: "退出登录"))
-                        }
                     }
                 }
             }

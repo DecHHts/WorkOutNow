@@ -11,7 +11,6 @@ import SwiftData
 @Model
 final class UserProfile {
     var id: UUID
-    var appleUserID: String
     var email: String?
     var fullName: String?
     var birthday: Date?
@@ -26,7 +25,6 @@ final class UserProfile {
 
     init(
         id: UUID = UUID(),
-        appleUserID: String,
         email: String? = nil,
         fullName: String? = nil,
         birthday: Date? = nil,
@@ -35,7 +33,6 @@ final class UserProfile {
         weightKg: Double? = nil
     ) {
         self.id = id
-        self.appleUserID = appleUserID
         self.email = email
         self.fullName = fullName
         self.birthday = birthday

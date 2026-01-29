@@ -14,7 +14,6 @@ struct WorkOutNowApp: App {
 
     // Initialize managers
     @State private var localizationManager = LocalizationManager()
-    @State private var authManager = AuthenticationManager()
     @State private var themeManager = ThemeManager()
 
     var sharedModelContainer: ModelContainer = {
@@ -43,31 +42,18 @@ struct WorkOutNowApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Group {
-                if authManager.isAuthenticated {
-                    ContentView()
-                        .onAppear {
-                            if !hasSeededExercises {
-                                ExerciseSeeder.seedExercises(modelContext: sharedModelContainer.mainContext)
-                                hasSeededExercises = true
-                            }
-                        }
-                        .transition(.opacity)
-                } else {
-                    SignInView()
-                        .transition(.opacity)
+            ContentView()
+                .onAppear {
+                    if !hasSeededExercises {
+                        ExerciseSeeder.seedExercises(modelContext: sharedModelContainer.mainContext)
+                        hasSeededExercises = true
+                    }
                 }
-            }
-            .animation(.easeInOut, value: authManager.isAuthenticated)
-            .preferredColorScheme(themeManager.theme.colorScheme)
-            .tint(themeManager.theme.primaryColor)
-            .onAppear {
-                authManager.configure(modelContext: sharedModelContainer.mainContext)
-            }
+                .preferredColorScheme(themeManager.theme.colorScheme)
+                .tint(themeManager.theme.primaryColor)
         }
         .modelContainer(sharedModelContainer)
         .environment(localizationManager)
-        .environment(authManager)
         .environment(themeManager)
     }
 }
