@@ -11,6 +11,7 @@ import SwiftData
 struct ExerciseDatabaseView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(LocalizationManager.self) private var localization
+    @Environment(ThemeManager.self) private var themeManager
     @Query(sort: \Exercise.nameEnglish) private var exercises: [Exercise]
     @State private var selectedMuscleGroup: MuscleGroup?
     @State private var showingAddExercise = false
@@ -76,8 +77,13 @@ struct ExerciseDatabaseView: View {
                     }
                 }
                 .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
             }
+            .background(themeManager.theme.backgroundColor.ignoresSafeArea())
             .navigationTitle(localization.text(english: "Exercises", chinese: "动作库"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(themeManager.theme.backgroundColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingAddExercise = true }) {

@@ -11,6 +11,7 @@ import SwiftData
 struct WorkoutCalendarView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(LocalizationManager.self) private var localization
+    @Environment(ThemeManager.self) private var themeManager
     @Query(sort: \WorkoutLog.date, order: .reverse) private var workoutLogs: [WorkoutLog]
 
     @State private var selectedDate = Date()
@@ -29,23 +30,49 @@ struct WorkoutCalendarView: View {
         }
     }
 
+    private var isSelectedDateToday: Bool {
+        calendar.isDateInToday(selectedDate)
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                CalendarGridView(
-                    selectedDate: $selectedDate,
-                    workoutLogs: workoutLogs
-                )
-                .padding()
+                // 固定的日历部分
+                VStack(spacing: 0) {
+                    CalendarGridView(
+                        selectedDate: $selectedDate,
+                        workoutLogs: workoutLogs
+                    )
+                    .padding()
 
-                Divider()
+                    Divider()
+                }
 
-                WorkoutDetailView(
-                    date: selectedDate,
-                    workout: selectedDateWorkout
-                )
+                // 可滚动的详情部分
+                ScrollView {
+                    VStack(spacing: 16) {
+                        // 今日训练计划（仅当选中今天时显示）
+                        if isSelectedDateToday {
+                            TodayTrainingPlanView(
+                                date: selectedDate,
+                                showingLogWorkout: $showingLogWorkout
+                            )
+                            .padding()
+                        }
+
+                        // 训练详情
+                        WorkoutDetailView(
+                            date: selectedDate,
+                            workout: selectedDateWorkout
+                        )
+                    }
+                }
             }
+            .background(themeManager.theme.backgroundColor.ignoresSafeArea())
             .navigationTitle(localization.text(english: "Workout Calendar", chinese: "训练日历"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(themeManager.theme.backgroundColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingLogWorkout = true }) {
@@ -202,15 +229,14 @@ struct WorkoutDetailView: View {
     @Environment(LocalizationManager.self) private var localization
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text(date, style: .date)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding(.horizontal)
-                    .padding(.top)
+        VStack(alignment: .leading, spacing: 16) {
+            Text(date, style: .date)
+                .font(.title2)
+                .fontWeight(.bold)
+                .padding(.horizontal)
+                .padding(.top)
 
-                if let workout = workout {
+            if let workout = workout {
                     VStack(alignment: .leading, spacing: 12) {
                         if let duration = workout.duration {
                             HStack {
@@ -266,12 +292,9 @@ struct WorkoutDetailView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                 }
-
-                Spacer()
             }
         }
     }
-}
 
 struct ExerciseSetGroup: View {
     let exercise: Exercise

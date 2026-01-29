@@ -15,6 +15,7 @@ struct WorkOutNowApp: App {
     // Initialize managers
     @State private var localizationManager = LocalizationManager()
     @State private var authManager = AuthenticationManager()
+    @State private var themeManager = ThemeManager()
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -58,6 +59,8 @@ struct WorkOutNowApp: App {
                 }
             }
             .animation(.easeInOut, value: authManager.isAuthenticated)
+            .preferredColorScheme(themeManager.theme.colorScheme)
+            .tint(themeManager.theme.primaryColor)
             .onAppear {
                 authManager.configure(modelContext: sharedModelContainer.mainContext)
             }
@@ -65,5 +68,6 @@ struct WorkOutNowApp: App {
         .modelContainer(sharedModelContainer)
         .environment(localizationManager)
         .environment(authManager)
+        .environment(themeManager)
     }
 }

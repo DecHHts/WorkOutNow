@@ -11,6 +11,7 @@ import SwiftData
 struct PlanCalendarView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(LocalizationManager.self) private var localization
+    @Environment(ThemeManager.self) private var themeManager
     @Query(filter: #Predicate<TrainingPlan> { $0.isActive }, sort: \TrainingPlan.name) private var activePlans: [TrainingPlan]
     @Query(sort: \WorkoutLog.date, order: .reverse) private var workoutLogs: [WorkoutLog]
     @Query private var planCompletions: [PlanCompletion]
@@ -30,18 +31,22 @@ struct PlanCalendarView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 if let plan = activePlan {
-                    PlanCalendarGridView(
-                        selectedDate: $selectedDate,
-                        currentMonth: $currentMonth,
-                        plan: plan,
-                        workoutLogs: workoutLogs,
-                        planCompletions: planCompletions,
-                        modelContext: modelContext
-                    )
-                    .padding()
+                    // 固定的日历部分
+                    VStack(spacing: 0) {
+                        PlanCalendarGridView(
+                            selectedDate: $selectedDate,
+                            currentMonth: $currentMonth,
+                            plan: plan,
+                            workoutLogs: workoutLogs,
+                            planCompletions: planCompletions,
+                            modelContext: modelContext
+                        )
+                        .padding()
 
-                    Divider()
+                        Divider()
+                    }
 
+                    // 可滚动的详情部分
                     PlanDayDetailView(
                         date: selectedDate,
                         plan: plan,
@@ -57,7 +62,11 @@ struct PlanCalendarView: View {
                     )
                 }
             }
+            .background(themeManager.theme.backgroundColor.ignoresSafeArea())
             .navigationTitle(localization.text(english: "Plan Calendar", chinese: "计划日历"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(themeManager.theme.backgroundColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
 }

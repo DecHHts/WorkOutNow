@@ -11,6 +11,7 @@ import SwiftData
 struct TrainingPlansView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(LocalizationManager.self) private var localization
+    @Environment(ThemeManager.self) private var themeManager
     @Query(sort: \TrainingPlan.name) private var plans: [TrainingPlan]
     @State private var showingCreatePlan = false
 
@@ -42,7 +43,12 @@ struct TrainingPlansView: View {
                 }
                 .onDelete(perform: deletePlans)
             }
+            .scrollContentBackground(.hidden)
+            .background(themeManager.theme.backgroundColor.ignoresSafeArea())
             .navigationTitle(localization.text(english: "Training Plans", chinese: "训练计划"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(themeManager.theme.backgroundColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingCreatePlan = true }) {

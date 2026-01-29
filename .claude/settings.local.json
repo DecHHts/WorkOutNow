@@ -21,7 +21,12 @@
       "Bash(__NEW_LINE_891dff21f166c377__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
       "Bash(__NEW_LINE_dd8235a8d70fee4d__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
       "Bash(__NEW_LINE_76b91a958ea6d166__ xcrun simctl install $DEVICE_ID \"$APP_PATH\")",
-      "Bash(__NEW_LINE_76b91a958ea6d166__ sleep 8)"
+      "Bash(__NEW_LINE_76b91a958ea6d166__ sleep 8)",
+      "Bash(chmod:*)",
+      "Bash(/Users/christopher/heyuxuan_prjs/Xcode/WorkOutNow/create_app_icon.sh)",
+      "Bash(pip3 install:*)",
+      "Bash(bash:*)",
+      "Bash(sips:*)"
     ]
   }
 }

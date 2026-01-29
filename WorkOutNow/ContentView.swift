@@ -10,6 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(LocalizationManager.self) private var localization
+    @Environment(ThemeManager.self) private var themeManager
 
     var body: some View {
         TabView {
@@ -38,6 +39,7 @@ struct ContentView: View {
                     Label(localization.text(english: "Settings", chinese: "设置"), systemImage: "gearshape")
                 }
         }
+        .background(themeManager.theme.backgroundColor.ignoresSafeArea())
     }
 }
 
