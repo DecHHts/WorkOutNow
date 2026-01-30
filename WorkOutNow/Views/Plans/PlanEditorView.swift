@@ -57,6 +57,7 @@ struct PlanEditorView: View {
         }
         .navigationTitle(plan.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 

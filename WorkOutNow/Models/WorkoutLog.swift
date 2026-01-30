@@ -15,6 +15,7 @@ final class WorkoutLog {
     var duration: TimeInterval?
     var notes: String?
     var intensityRating: Int? // 1-10
+    var caloriesBurned: Double? // 消耗的热量（千卡）
 
     @Relationship(deleteRule: .cascade, inverse: \WorkoutSet.workoutLog)
     var sets: [WorkoutSet]?
@@ -24,13 +25,15 @@ final class WorkoutLog {
         date: Date = Date(),
         duration: TimeInterval? = nil,
         notes: String? = nil,
-        intensityRating: Int? = nil
+        intensityRating: Int? = nil,
+        caloriesBurned: Double? = nil
     ) {
         self.id = id
         self.date = date
         self.duration = duration
         self.notes = notes
         self.intensityRating = intensityRating
+        self.caloriesBurned = caloriesBurned
     }
 }
 

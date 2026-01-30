@@ -73,6 +73,7 @@ struct UserProfileView: View {
         .onAppear {
             loadProfile()
         }
+        .toolbar(.hidden, for: .tabBar)
     }
 
     private func loadProfile() {

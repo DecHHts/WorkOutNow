@@ -24,6 +24,16 @@ struct ContentView: View {
                     Label(localization.text(english: "Plan", chinese: "计划"), systemImage: "calendar.badge.checkmark")
                 }
 
+            NutritionCalendarView()
+                .tabItem {
+                    Label(localization.text(english: "Nutrition", chinese: "营养"), systemImage: "fork.knife")
+                }
+
+            BodyMetricsDashboardView()
+                .tabItem {
+                    Label(localization.text(english: "Body", chinese: "身体"), systemImage: "figure.arms.open")
+                }
+
             ExerciseDatabaseView()
                 .tabItem {
                     Label(localization.text(english: "Exercises", chinese: "动作库"), systemImage: "figure.strengthtraining.traditional")

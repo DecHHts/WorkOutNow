@@ -17,6 +17,15 @@ struct CreatePlanView: View {
     @State private var cycleDays = 7
     @State private var startDate = Date()
     @State private var isActive = true
+    @State private var createNutritionPlan = false
+    @State private var nutritionPlanName = ""
+    @State private var dailyCalorieTarget: Double = 2000
+
+    @Query private var userProfiles: [UserProfile]
+
+    private var userProfile: UserProfile? {
+        userProfiles.first
+    }
 
     var body: some View {
         NavigationStack {
@@ -33,6 +42,55 @@ struct CreatePlanView: View {
                     )
 
                     Toggle(localization.text(english: "Active Plan", chinese: "激活此计划"), isOn: $isActive)
+                }
+
+                Section {
+                    Toggle(localization.text(english: "Create Nutrition Plan", chinese: "同步创建饮食计划"), isOn: $createNutritionPlan)
+
+                    if createNutritionPlan {
+                        TextField(
+                            localization.text(english: "Nutrition Plan Name", chinese: "饮食计划名称"),
+                            text: $nutritionPlanName
+                        )
+                        .onAppear {
+                            if nutritionPlanName.isEmpty {
+                                nutritionPlanName = planName + " - 饮食计划"
+                            }
+                        }
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(localization.text(english: "Daily Calorie Target", chinese: "每日热量目标"))
+                                .font(.subheadline)
+
+                            HStack {
+                                Slider(value: $dailyCalorieTarget, in: 1200...3500, step: 50)
+                                Text("\(Int(dailyCalorieTarget)) kcal")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.orange)
+                                    .frame(width: 100, alignment: .trailing)
+                            }
+
+                            if let profile = userProfile,
+                               let weight = profile.weightKg,
+                               let height = profile.heightCm,
+                               let birthday = profile.birthday {
+                                let age = Calendar.current.dateComponents([.year], from: birthday, to: Date()).year ?? 25
+                                let bmr = CalorieCalculator.calculateBMR(
+                                    weightKg: weight,
+                                    heightCm: height,
+                                    age: age,
+                                    gender: profile.gender
+                                )
+                                let tdee = CalorieCalculator.calculateTDEE(bmr: bmr, activityLevel: .moderate)
+
+                                Text("建议: \(Int(tdee)) kcal (基于您的个人信息)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                } header: {
+                    Text(localization.text(english: "Nutrition Plan", chinese: "饮食计划"))
                 }
 
                 Section {
@@ -75,7 +133,52 @@ struct CreatePlanView: View {
         }
 
         modelContext.insert(plan)
+
+        // 如果选择创建饮食计划，则同步创建
+        if createNutritionPlan {
+            let macros = calculateMacroTargets()
+
+            let nutritionPlan = NutritionPlan(
+                name: nutritionPlanName.isEmpty ? planName + " - 饮食计划" : nutritionPlanName,
+                dailyCalorieTarget: dailyCalorieTarget,
+                proteinTargetGrams: macros.protein,
+                carbsTargetGrams: macros.carbs,
+                fatTargetGrams: macros.fat,
+                startDate: Calendar.current.startOfDay(for: startDate),
+                isActive: true,
+                linkedTrainingPlan: plan
+            )
+
+            // 停用其他饮食计划
+            let descriptor = FetchDescriptor<NutritionPlan>()
+            if let existingPlans = try? modelContext.fetch(descriptor) {
+                for existingPlan in existingPlans {
+                    existingPlan.isActive = false
+                }
+            }
+
+            modelContext.insert(nutritionPlan)
+        }
+
+        try? modelContext.save()
         dismiss()
+    }
+
+    private func calculateMacroTargets() -> (protein: Double, carbs: Double, fat: Double) {
+        guard let profile = userProfile, let weight = profile.weightKg else {
+            // 使用默认值
+            return CalorieCalculator.calculateMacroTargets(
+                dailyCalories: dailyCalorieTarget,
+                weightKg: 70,
+                goal: .maintain
+            )
+        }
+
+        return CalorieCalculator.calculateMacroTargets(
+            dailyCalories: dailyCalorieTarget,
+            weightKg: weight,
+            goal: .maintain
+        )
     }
 }
 

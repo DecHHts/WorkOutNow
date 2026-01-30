@@ -15,6 +15,7 @@ struct WorkOutNowApp: App {
     // Initialize managers
     @State private var localizationManager = LocalizationManager()
     @State private var themeManager = ThemeManager()
+    @State private var authenticationManager = AuthenticationManager()
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -26,7 +27,11 @@ struct WorkOutNowApp: App {
             PlanExercise.self,
             PlanCompletion.self,
             UserProfile.self,
-            BodyMetric.self
+            BodyMetric.self,
+            NutritionPlan.self,
+            DailyMealRecord.self,
+            Meal.self,
+            FoodItem.self
         ])
 
         // Simple configuration that works reliably
@@ -42,18 +47,25 @@ struct WorkOutNowApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .onAppear {
-                    if !hasSeededExercises {
-                        ExerciseSeeder.seedExercises(modelContext: sharedModelContainer.mainContext)
-                        hasSeededExercises = true
-                    }
+            Group {
+                if authenticationManager.isAuthenticated {
+                    ContentView()
+                        .onAppear {
+                            if !hasSeededExercises {
+                                ExerciseSeeder.seedExercises(modelContext: sharedModelContainer.mainContext)
+                                hasSeededExercises = true
+                            }
+                        }
+                } else {
+                    SignInWithAppleView()
                 }
-                .preferredColorScheme(themeManager.theme.colorScheme)
-                .tint(themeManager.theme.primaryColor)
+            }
+            .preferredColorScheme(themeManager.theme.colorScheme)
+            .tint(themeManager.theme.primaryColor)
         }
         .modelContainer(sharedModelContainer)
         .environment(localizationManager)
         .environment(themeManager)
+        .environment(authenticationManager)
     }
 }

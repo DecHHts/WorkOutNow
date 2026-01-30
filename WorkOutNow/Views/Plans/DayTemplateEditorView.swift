@@ -62,6 +62,7 @@ struct DayTemplateEditorView: View {
         .sheet(isPresented: $showingExercisePicker) {
             ExercisePickerView(dayTemplate: dayTemplate)
         }
+        .toolbar(.hidden, for: .tabBar)
     }
 
     private func deleteExercises(at offsets: IndexSet) {

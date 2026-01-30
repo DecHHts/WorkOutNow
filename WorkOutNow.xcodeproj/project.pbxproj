@@ -295,6 +295,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WorkOutNow/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "WorkOutNow需要读取您的健康数据（体重、活动热量等）以提供更准确的训练分析和营养建议。";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "WorkOutNow需要将您的训练数据和热量消耗同步到健康应用，帮助您更全面地追踪健康状况。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -331,6 +333,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WorkOutNow/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "WorkOutNow需要读取您的健康数据（体重、活动热量等）以提供更准确的训练分析和营养建议。";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "WorkOutNow需要将您的训练数据和热量消耗同步到健康应用，帮助您更全面地追踪健康状况。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

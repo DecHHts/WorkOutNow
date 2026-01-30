@@ -26,7 +26,11 @@
       "Bash(/Users/christopher/heyuxuan_prjs/Xcode/WorkOutNow/create_app_icon.sh)",
       "Bash(pip3 install:*)",
       "Bash(bash:*)",
-      "Bash(sips:*)"
+      "Bash(sips:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(awk:*)",
+      "Bash(xcrun simctl uninstall:*)"
     ]
   }
 }

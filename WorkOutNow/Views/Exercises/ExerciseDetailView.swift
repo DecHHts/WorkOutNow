@@ -135,5 +135,6 @@ struct ExerciseDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
